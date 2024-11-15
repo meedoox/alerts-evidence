@@ -17,12 +17,12 @@ import logo from '../../public/faceUp-logo.svg'
 const items = [
   {
     title: 'Home',
-    url: '#',
+    url: '/',
     icon: Home,
   },
   {
     title: 'View Reports',
-    url: '#',
+    url: '/reports',
     icon: List,
   },
 ]
@@ -30,14 +30,14 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className='my-4'>
         <SidebarGroup>
           <SidebarGroupLabel>
             <div className='text-center w-full px-4'>
               <Image src={logo} alt='NNTB logo' className='mx-auto w-1/2' />
             </div>
           </SidebarGroupLabel>
-          <SidebarGroupContent className='my-4'>
+          <SidebarGroupContent className='my-8'>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
