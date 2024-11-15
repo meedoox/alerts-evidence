@@ -21,8 +21,8 @@ export class UserController {
   }
 
   @Get()
-  async getAllUsers() {
-    return await this.userService.getAllUsers();
+  async getAllUsers(@Query('includeAlerts') includeAlerts: string) {
+    return await this.userService.getAllUsers(includeAlerts === 'true');
   }
 
   @Get(':id')

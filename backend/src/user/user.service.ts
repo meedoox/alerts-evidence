@@ -16,7 +16,9 @@ export class UserService {
     return this.toPublicUser(user);
   }
 
-  async getAllUsers(): Promise<GetAllUsersResponse[]> {
+  async getAllUsers(
+    includeAlerts: boolean = false,
+  ): Promise<GetAllUsersResponse[]> {
     return await this.prisma.user.findMany({
       select: {
         id: true,
@@ -24,7 +26,7 @@ export class UserService {
         lastName: true,
         email: true,
         createdAt: true,
-        alerts: true,
+        alerts: includeAlerts,
       },
     });
   }
