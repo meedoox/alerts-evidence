@@ -6,6 +6,7 @@ import {
   Param,
   Put,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { AlertService } from './alert.service';
 import { CreateAlertDto } from './alert.types';
@@ -23,13 +24,19 @@ export class AlertController {
   }
 
   @Get()
-  async getAllAlerts() {
-    return await this.alertService.getAllAlerts();
+  async getAllAlerts(@Query('includeUsers') includeUsers: string) {
+    return await this.alertService.getAllAlerts(includeUsers === 'true');
   }
 
   @Get(':id')
-  async getAlertById(@Param('id') id: string) {
-    return await this.alertService.getAlertById(Number(id));
+  async getAlertById(
+    @Param('id') id: string,
+    @Query('includeUser') includeUser: string,
+  ) {
+    return await this.alertService.getAlertById(
+      Number(id),
+      includeUser === 'true',
+    );
   }
 
   @Put(':id')

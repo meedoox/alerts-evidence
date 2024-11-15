@@ -10,16 +10,21 @@ export class AlertService {
     return await this.prisma.alert.create({ data });
   }
 
-  async getAllAlerts(): Promise<GetAllAlertsResponse[]> {
+  async getAllAlerts(
+    includeUsers: boolean = false,
+  ): Promise<GetAllAlertsResponse[]> {
     return await this.prisma.alert.findMany({
-      include: { user: true },
+      include: { user: includeUsers },
     });
   }
 
-  async getAlertById(id: number): Promise<GetAllAlertsResponse> {
+  async getAlertById(
+    id: number,
+    includeUser: boolean = false,
+  ): Promise<GetAllAlertsResponse> {
     return await this.prisma.alert.findUnique({
       where: { id },
-      include: { user: true },
+      include: { user: includeUser },
     });
   }
 
