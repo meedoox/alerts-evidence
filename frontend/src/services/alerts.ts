@@ -15,3 +15,7 @@ export const createAlert = async (data: FormData): Promise<Alert> => {
   })
   return response.data
 }
+
+export const deleteAlert = async (id: number): Promise<void> => {
+  await api.delete(`/alerts/${id}`)
+}

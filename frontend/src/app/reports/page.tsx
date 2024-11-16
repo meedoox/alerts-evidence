@@ -1,9 +1,10 @@
 'use client'
 
 import { AlertsTable, ReportsTableProps } from '@/components/AlertsTable'
+import { ConfirmationDialog } from '@/components/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { getAlerts } from '@/services/alerts'
+import { deleteAlert, getAlerts } from '@/services/alerts'
 import { Alert } from '@/types/alert'
 import { Eye, Pen, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -19,6 +20,15 @@ export default function Reports() {
     loadAlerts()
   }, [])
 
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteAlert(id)
+      setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== id))
+    } catch (error) {
+      console.error('Failed to delete alert:', error)
+    }
+  }
+
   const columns: ReportsTableProps['columns'] = [
     { header: 'Name', value: 'name' },
     { header: 'Age', value: 'age' },
@@ -32,12 +42,20 @@ export default function Reports() {
           <Button variant='outline' size='icon'>
             <Eye />
           </Button>
-          <Button variant='destructive' size='icon'>
+          <Button className='bg-blue-200 text-slate-800' size='icon'>
             <Pen />
           </Button>
-          <Button variant='destructive' size='icon'>
-            <Trash2 />
-          </Button>
+          <ConfirmationDialog
+            trigger={
+              <Button variant='destructive' size='icon'>
+                <Trash2 />
+              </Button>
+            }
+            title='Are you absolutely sure?'
+            description='This action cannot be undone. This will permanently delete this alert.'
+            confirmText='Delete'
+            onConfirm={() => handleDelete(item.id)}
+          />
         </div>
       ),
       className: 'w-[170px]',
@@ -51,7 +69,7 @@ export default function Reports() {
           <AlertsTable
             data={alerts}
             columns={columns}
-            caption='A list of all alerts'
+            caption='A list of your alerts'
           />
         </Card>
       </div>

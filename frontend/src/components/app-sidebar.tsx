@@ -13,7 +13,6 @@ import {
 import Image from 'next/image'
 import logo from '../../public/faceUp-logo.svg'
 
-// Menu items.
 const items = [
   {
     title: 'Home',

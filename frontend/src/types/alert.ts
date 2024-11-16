@@ -1,4 +1,3 @@
-// types/alert.ts
 export interface Alert {
   id: number
   name: string
