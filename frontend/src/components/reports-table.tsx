@@ -1,78 +1,56 @@
+'use client'
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { X, Check, Pen, Trash2, Eye } from 'lucide-react'
-import { Button } from './ui/button'
+import { X, Check } from 'lucide-react'
+import { useEffect } from 'react'
 
-const invoices = [
-  {
-    id: 1,
-    name: 'Matyas Herman',
-    age: 24,
-    file: true,
-    note: 'Some note the user has written',
-  },
-  {
-    id: 2,
-    name: 'Matyas Herman',
-    age: 14,
-    file: false,
-    note: 'Some note the user has written',
-  },
-  {
-    id: 3,
-    name: 'Matyas Herman',
-    age: 33,
-    file: false,
-    note: 'Some note the user has written',
-  },
-  {
-    id: 4,
-    name: 'Matyas Herman',
-    age: 29,
-    file: true,
-    note: 'Some note the user has written',
-  },
-]
+interface ReportsTableProps {
+  data: any[]
+  columns: {
+    header: string
+    accessor: string
+    isBoolean?: boolean
+    renderAction?: (item: any) => React.ReactNode
+  }[]
+  caption?: string
+}
 
-export function ReportsTable() {
+export function ReportsTable({ data, columns, caption }: ReportsTableProps) {
   return (
     <Table>
-      <TableCaption>A list of all reports</TableCaption>
+      {caption && <TableCaption>{caption}</TableCaption>}
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Age</TableHead>
-          <TableHead>File included</TableHead>
-          <TableHead className='w-max'>Note</TableHead>
-          <TableHead className='text-right'>Action</TableHead>
+          {columns.map((column, index) => (
+            <TableHead key={index}>{column.header}</TableHead>
+          ))}
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.id}>
-            <TableCell className='font-medium'>{invoice.name}</TableCell>
-            <TableCell>{invoice.age}</TableCell>
-            <TableCell>{invoice.file === true ? <Check /> : <X />}</TableCell>
-            <TableCell className=''>{invoice.note}</TableCell>
-            <TableCell className='text-right'>
-              <Button variant='destructive' size='icon'>
-                <Eye />
-              </Button>
-              <Button variant='destructive' size='icon'>
-                <Pen />
-              </Button>
-              <Button variant='destructive' size='icon'>
-                <Trash2 />
-              </Button>
-            </TableCell>
+        {data.map((item, rowIndex) => (
+          <TableRow key={rowIndex}>
+            {columns.map((column, colIndex) => (
+              <TableCell key={colIndex}>
+                {column.isBoolean ? (
+                  item[column.accessor] ? (
+                    <Check />
+                  ) : (
+                    <X />
+                  )
+                ) : column.renderAction ? (
+                  column.renderAction(item)
+                ) : (
+                  item[column.accessor]
+                )}
+              </TableCell>
+            ))}
           </TableRow>
         ))}
       </TableBody>
