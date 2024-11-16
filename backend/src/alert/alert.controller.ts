@@ -7,19 +7,28 @@ import {
   Put,
   Delete,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AlertService } from './alert.service';
 import { CreateAlertDto } from './alert.types';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Multer } from 'multer';
 
 @Controller('alerts')
 export class AlertController {
   constructor(private alertService: AlertService) {}
 
   @Post()
-  async createAlert(
-    @Body()
-    data: CreateAlertDto,
-  ) {
+  @UseInterceptors(FileInterceptor('file'))
+  async createAlert(@UploadedFile() file: Multer.File, @Body() body: any) {
+    const data: CreateAlertDto = {
+      ...body,
+      age: parseInt(body.age, 10),
+      userId: parseInt(body.userId, 10),
+      filePath: file ? file.path : undefined,
+    };
+
     return await this.alertService.createAlert(data);
   }
 

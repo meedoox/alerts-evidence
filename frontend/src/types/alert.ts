@@ -7,4 +7,5 @@ export interface Alert {
   note?: string
   createdAt?: Date
   updatedAt?: Date
+  userId: number
 }

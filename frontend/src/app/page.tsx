@@ -1,3 +1,4 @@
+import { AlertForm } from '@/components/AlertsForm'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -16,9 +17,10 @@ export default function Home() {
         <CardTitle>Create project</CardTitle>
         <CardDescription>Deploy your new project in one-click.</CardDescription>
       </CardHeader>
-      <CardContent>Test</CardContent>
-      <CardFooter className='flex justify-between'>
-        <Button variant='default'>Cancel</Button>
+      <CardContent>
+        <AlertForm />
+      </CardContent>
+      <CardFooter className='flex justify-end'>
         <Button>Deploy</Button>
       </CardFooter>
     </Card>
