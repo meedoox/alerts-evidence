@@ -11,25 +11,28 @@ import {
 import { X, Check } from 'lucide-react'
 import { useEffect } from 'react'
 
-interface ReportsTableProps {
+export interface ReportsTableProps {
   data: any[]
   columns: {
     header: string
-    accessor: string
+    value: string
     isBoolean?: boolean
     renderAction?: (item: any) => React.ReactNode
+    className?: string
   }[]
   caption?: string
 }
 
-export function ReportsTable({ data, columns, caption }: ReportsTableProps) {
+export function AlertsTable({ data, columns, caption }: ReportsTableProps) {
   return (
     <Table>
       {caption && <TableCaption>{caption}</TableCaption>}
       <TableHeader>
         <TableRow>
           {columns.map((column, index) => (
-            <TableHead key={index}>{column.header}</TableHead>
+            <TableHead key={index} className={column.className ?? ''}>
+              {column.header}
+            </TableHead>
           ))}
         </TableRow>
       </TableHeader>
@@ -37,9 +40,9 @@ export function ReportsTable({ data, columns, caption }: ReportsTableProps) {
         {data.map((item, rowIndex) => (
           <TableRow key={rowIndex}>
             {columns.map((column, colIndex) => (
-              <TableCell key={colIndex}>
+              <TableCell key={colIndex} className={column.className ?? ''}>
                 {column.isBoolean ? (
-                  item[column.accessor] ? (
+                  item[column.value] ? (
                     <Check />
                   ) : (
                     <X />
@@ -47,7 +50,7 @@ export function ReportsTable({ data, columns, caption }: ReportsTableProps) {
                 ) : column.renderAction ? (
                   column.renderAction(item)
                 ) : (
-                  item[column.accessor]
+                  item[column.value]
                 )}
               </TableCell>
             ))}

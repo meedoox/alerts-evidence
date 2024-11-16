@@ -1,6 +1,6 @@
 'use client'
 
-import { ReportsTable } from '@/components/reports-table'
+import { AlertsTable, ReportsTableProps } from '@/components/AlertsTable'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { getAlerts } from '@/services/alerts'
@@ -19,14 +19,14 @@ export default function Reports() {
     loadAlerts()
   }, [])
 
-  const columns = [
-    { header: 'Name', accessor: 'name' },
-    { header: 'Age', accessor: 'age' },
-    { header: 'File included', accessor: 'file', isBoolean: true },
-    { header: 'Note', accessor: 'note' },
+  const columns: ReportsTableProps['columns'] = [
+    { header: 'Name', value: 'name' },
+    { header: 'Age', value: 'age' },
+    { header: 'File included', value: 'file', isBoolean: true },
+    { header: 'Note', value: 'note', className: 'w-max' },
     {
       header: 'Actions',
-      accessor: '',
+      value: '',
       renderAction: (item: Alert) => (
         <div className='flex justify-between'>
           <Button variant='outline' size='icon'>
@@ -40,6 +40,7 @@ export default function Reports() {
           </Button>
         </div>
       ),
+      className: 'w-[170px]',
     },
   ]
 
@@ -47,7 +48,7 @@ export default function Reports() {
     <div>
       <div className='grid'>
         <Card>
-          <ReportsTable
+          <AlertsTable
             data={alerts}
             columns={columns}
             caption='A list of all alerts'
