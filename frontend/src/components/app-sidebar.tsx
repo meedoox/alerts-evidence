@@ -28,7 +28,7 @@ const items = [
   },
   {
     title: 'View Alerts',
-    url: '/reports',
+    url: '/alerts',
     icon: List,
   },
 ]

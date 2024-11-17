@@ -3,20 +3,20 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useEffect, useState } from 'react'
+import { useRouter, useParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { createAlert } from '@/services/alerts'
-import { useRouter } from 'next/navigation'
+import { getAlertById, updateAlert, createAlert } from '@/services/alerts'
 import { Label } from './ui/label'
 
 const formSchema = z.object({
@@ -33,19 +33,59 @@ const formSchema = z.object({
   note: z.string().optional(),
   file: z.any().optional(),
 })
+
 type FormData = z.infer<typeof formSchema>
 
-export function AlertForm() {
+interface AlertFormProps {
+  alertId?: number
+  isEditMode?: boolean
+}
+
+export function AlertForm({
+  alertId = undefined,
+  isEditMode = false,
+}: AlertFormProps) {
   const router = useRouter()
+  const [defaultValues, setDefaultValues] = useState<FormData>({
+    name: '',
+    age: '0',
+    note: '',
+    file: null,
+  })
+
+  useEffect(() => {
+    if (isEditMode && alertId) {
+      console.log('in')
+      const loadAlert = async () => {
+        try {
+          const data = await getAlertById(alertId)
+          console.log(data)
+          setDefaultValues({
+            name: data.name,
+            age: data.age.toString(),
+            note: data.note || '',
+            file: null,
+          })
+          console.log(defaultValues)
+        } catch (error) {
+          console.error('Failed to load alert:', error)
+        }
+      }
+      loadAlert()
+    }
+  }, [alertId, isEditMode])
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      age: 0,
-      note: '',
-      file: false,
-    },
+    defaultValues,
   })
+
+  useEffect(() => {
+    if (defaultValues) {
+      console.log('defaultValues changed:', defaultValues)
+      form.reset(defaultValues)
+    }
+  }, [defaultValues])
 
   async function onSubmit(values: FormData) {
     try {
@@ -55,11 +95,23 @@ export function AlertForm() {
       if (values.note) formData.append('note', values.note)
       if (values.file && values.file[0]) formData.append('file', values.file[0])
 
-      await createAlert(formData)
-      router.push('/reports')
+      if (isEditMode && alertId) {
+        await updateAlert(alertId, formData)
+        router.push(`/alerts/${alertId}`)
+      } else {
+        const response = await createAlert(formData)
+        router.push(`/alerts/${response.id}`)
+      }
     } catch (error) {
-      console.error('Failed to create alert:', error)
+      console.error(
+        isEditMode ? 'Failed to update alert:' : 'Failed to create alert:',
+        error
+      )
     }
+  }
+
+  if (!defaultValues) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -70,13 +122,12 @@ export function AlertForm() {
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>
+                Who is not feeling well? <span className='text-red-500'>*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder='Enter name' {...field} />
               </FormControl>
-              <FormDescription>
-                Enter the name of the person reporting.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -86,7 +137,9 @@ export function AlertForm() {
           name='age'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Age</FormLabel>
+              <FormLabel>
+                Age <span className='text-red-500'>*</span>
+              </FormLabel>
               <FormControl>
                 <Input type='number' placeholder='Enter age' {...field} />
               </FormControl>
@@ -101,7 +154,11 @@ export function AlertForm() {
             <FormItem>
               <FormLabel>Note</FormLabel>
               <FormControl>
-                <Input placeholder='Additional note (optional)' {...field} />
+                <Input
+                  placeholder='Additional note (optional)'
+                  {...field}
+                  defaultValue={defaultValues.note}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -114,7 +171,9 @@ export function AlertForm() {
             <FormItem>
               <FormControl>
                 <div className='grid w-full max-w-sm items-center gap-1.5'>
-                  <Label htmlFor='file'>File</Label>
+                  <Label htmlFor='file'>
+                    {isEditMode ? 'Upload New File' : 'File'}
+                  </Label>
                   <Input
                     id='file'
                     type='file'
@@ -126,7 +185,7 @@ export function AlertForm() {
             </FormItem>
           )}
         />
-        <Button type='submit'>Submit</Button>
+        <Button type='submit'>{isEditMode ? 'Update' : 'Create'}</Button>
       </form>
     </Form>
   )

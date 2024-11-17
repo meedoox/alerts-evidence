@@ -1,5 +1,6 @@
+'use client'
+
 import { AlertForm } from '@/components/AlertsForm'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,

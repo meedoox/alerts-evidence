@@ -35,6 +35,10 @@ export default function Reports() {
     router.push(`/alerts/${id}`)
   }
 
+  const handleEdit = (id: number) => {
+    router.push(`/alerts/edit/${id}`)
+  }
+
   const columns: ReportsTableProps['columns'] = [
     { header: 'Name', value: 'name' },
     { header: 'Age', value: 'age' },
@@ -55,6 +59,7 @@ export default function Reports() {
           <Button
             className='bg-blue-200 text-slate-800 hover:bg-blue-300'
             size='icon'
+            onClick={() => handleEdit(item.id)}
           >
             <Pen />
           </Button>

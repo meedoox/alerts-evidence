@@ -84,10 +84,12 @@ export default function AlertDetailPage() {
             </div>
           </CardContent>
           <CardFooter className='flex justify-between'>
-            <Button variant='outline' onClick={() => router.push('/reports')}>
+            <Button variant='outline' onClick={() => router.push('/alerts')}>
               Back to Alerts
             </Button>
-            <Button>Edit Alert</Button>
+            <Button onClick={() => router.push(`/alerts/edit/${alert.id}`)}>
+              Edit Alert
+            </Button>
           </CardFooter>
         </Card>
       </div>
