@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/card'
 import { format } from 'date-fns'
 import { ConfirmationDialog } from '@/components/ConfirmDialog'
-import { Trash2 } from 'lucide-react'
+import { DownloadIcon, Trash2 } from 'lucide-react'
 
 export default function AlertDetailPage() {
   const { id } = useParams()
@@ -47,6 +47,19 @@ export default function AlertDetailPage() {
       router.push('/alerts')
     } catch (error) {
       console.error('Failed to delete alert:', error)
+    }
+  }
+
+  const handleDownload = () => {
+    if (alert.file) {
+      const link = document.createElement('a')
+      link.href = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + alert.file
+      link.download = alert.file
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } else {
+      console.error('No file available for download.')
     }
   }
 
@@ -82,15 +95,10 @@ export default function AlertDetailPage() {
                 <span>{alert.note}</span>
               </div>
               {alert.file && (
-                <div>
-                  <Label>File:</Label>
-                  <a
-                    href={alert.file}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    Download File
-                  </a>
+                <div className='flex space-x-3'>
+                  <Button onClick={() => handleDownload()}>
+                    <DownloadIcon /> Download File
+                  </Button>
                 </div>
               )}
             </div>

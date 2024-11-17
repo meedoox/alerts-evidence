@@ -13,20 +13,35 @@ import {
 import { AlertService } from './alert.service';
 import { CreateAlertDto } from './alert.types';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Multer } from 'multer';
+import { Multer, diskStorage } from 'multer';
+import * as path from 'path';
+import * as fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller('alerts')
 export class AlertController {
   constructor(private alertService: AlertService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          fs.mkdirSync('./uploads/', { recursive: true });
+          const uniqueName = `${uuidv4()}-${path.normalize(file.originalname)}`;
+          file.originalname = uniqueName;
+          callback(null, uniqueName);
+        },
+      }),
+    }),
+  )
   async createAlert(@UploadedFile() file: Multer.File, @Body() body: any) {
     const data: CreateAlertDto = {
       ...body,
       age: parseInt(body.age, 10),
       userId: parseInt(body.userId, 10),
-      file: file ? file.path : undefined,
+      file: file ? `./uploads/${file.originalname}` : undefined,
     };
 
     return await this.alertService.createAlert(data);
@@ -49,21 +64,31 @@ export class AlertController {
   }
 
   @Put(':id')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          fs.mkdirSync('./uploads/', { recursive: true });
+          const uniqueName = `${uuidv4()}-${path.normalize(file.originalname)}`;
+          file.originalname = uniqueName;
+          callback(null, uniqueName);
+        },
+      }),
+    }),
+  )
   async updateAlert(
     @Param('id') id: string,
     @UploadedFile() file: Multer.File,
     @Body() body: any,
   ) {
-    console.log(file);
     const data: CreateAlertDto = {
       ...body,
       age: parseInt(body.age, 10),
       userId: parseInt(body.userId, 10),
-      file: file ? file.originalname : undefined,
+      file: file ? `./uploads/${file.originalname}` : undefined,
     };
 
-    console.log(data);
     return await this.alertService.updateAlert(Number(id), data);
   }
 

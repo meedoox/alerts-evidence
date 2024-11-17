@@ -26,7 +26,6 @@ export const updateAlert = async (
   data: FormData
 ): Promise<Alert> => {
   data.append('userId', process.env.NEXT_PUBLIC_LOGGED_IN_USER_ID as string) // Always is using default user based on .env variable
-  console.log(data)
   const response = await api.put(`/alerts/${id}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
