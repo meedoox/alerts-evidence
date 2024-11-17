@@ -1,4 +1,12 @@
-import { ChevronUp, Home, List, LogOut, Settings, User2 } from 'lucide-react'
+import {
+  ChevronUp,
+  Home,
+  List,
+  LogOut,
+  MailPlus,
+  Settings,
+  User2,
+} from 'lucide-react'
 
 import {
   Sidebar,
@@ -20,11 +28,23 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 
-const items = [
+interface SidebarItems {
+  title: string
+  url: string
+  icon: any
+  className?: string
+}
+const items: SidebarItems[] = [
   {
     title: 'Home',
     url: '/',
     icon: Home,
+  },
+  {
+    title: 'Add Alert',
+    url: '/alerts/add',
+    icon: MailPlus,
+    className: 'font-bold',
   },
   {
     title: 'View Alerts',
@@ -47,7 +67,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild className={item.className}>
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
