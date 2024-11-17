@@ -18,7 +18,6 @@ export const createAlert = async (data: FormData): Promise<Alert> => {
 
 export const getAlertById = async (id: number): Promise<Alert> => {
   const response = await api.get(`/alerts/${id}`)
-  console.log(response.data)
   return response.data
 }
 

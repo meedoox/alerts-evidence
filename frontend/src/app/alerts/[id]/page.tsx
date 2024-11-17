@@ -6,6 +6,15 @@ import { getAlertById } from '@/services/alerts'
 import { Alert } from '@/types/alert'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { format } from 'date-fns'
 
 export default function AlertDetailPage() {
   const { id } = useParams()
@@ -30,33 +39,58 @@ export default function AlertDetailPage() {
   }
 
   return (
-    <div className='space-y-8'>
-      <h1 className='text-2xl font-bold'>Alert Detail</h1>
-      <div className='space-y-4'>
-        <div>
-          <Label>Name:</Label>
-          <div>{alert.name}</div>
-        </div>
-        <div>
-          <Label>Age:</Label>
-          <div>{alert.age}</div>
-        </div>
-        <div>
-          <Label>Note:</Label>
-          <div>{alert.note || 'No note provided'}</div>
-        </div>
-        {alert.file && (
-          <div>
-            <Label>File:</Label>
-            <a href={alert.file} target='_blank' rel='noopener noreferrer'>
-              Download File
-            </a>
-          </div>
-        )}
+    <div>
+      <div className='grid'>
+        <Card className='h-full'>
+          <CardHeader>
+            <CardTitle>Alert Detail</CardTitle>
+            <CardDescription>
+              <div className='flex space-x-3'>
+                <span>Created:</span>
+                <span>
+                  {alert?.createdAt
+                    ? format(alert.createdAt, 'yyyy-MM-dd HH:mm')
+                    : 'No date available'}
+                </span>
+              </div>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className='grid w-full items-center gap-4'>
+              <div className='flex space-x-3'>
+                <span>Name:</span>
+                <span>{alert.name}</span>
+              </div>
+              <div className='flex space-x-3'>
+                <span>Age:</span>
+                <span>{alert.age}</span>
+              </div>
+              <div className='flex space-x-3'>
+                <span>Note:</span>
+                <span>{alert.note}</span>
+              </div>
+              {alert.file && (
+                <div>
+                  <Label>File:</Label>
+                  <a
+                    href={alert.file}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    Download File
+                  </a>
+                </div>
+              )}
+            </div>
+          </CardContent>
+          <CardFooter className='flex justify-between'>
+            <Button variant='outline' onClick={() => router.push('/reports')}>
+              Back to Alerts
+            </Button>
+            <Button>Edit Alert</Button>
+          </CardFooter>
+        </Card>
       </div>
-      <Button variant='outline' onClick={() => router.push('/reports')}>
-        Back to Alerts
-      </Button>
     </div>
   )
 }
