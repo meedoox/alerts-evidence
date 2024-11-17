@@ -67,8 +67,22 @@ Aplikace využívá moderní technologie pro zajištění vysoké spolehlivosti,
 
 ## Ukázka aplikace
 
+### Úvodní stránka
+
 ![Úvodní stránka](homepage.png)
+
+### Vytvoření upozornění
+
 ![Vytvoření upozornění](create_alert.png)
+
+### Detail upozornění
+
 ![Detail upozornění](alert_detail.png)
+
+### Smazat upozornění
+
 ![Smazat upozornění](delete_alert.png)
+
+### Seznam upozornění
+
 ![Seznam upozornění](list_alerts.png)
