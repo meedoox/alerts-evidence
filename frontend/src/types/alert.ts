@@ -2,7 +2,7 @@ export interface Alert {
   id: number
   name: string
   age: number
-  file?: boolean
+  file?: string
   note?: string
   createdAt?: Date
   updatedAt?: Date

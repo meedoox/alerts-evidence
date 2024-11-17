@@ -7,10 +7,12 @@ import { Card } from '@/components/ui/card'
 import { deleteAlert, getAlerts } from '@/services/alerts'
 import { Alert } from '@/types/alert'
 import { Eye, Pen, Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Reports() {
   const [alerts, setAlerts] = useState<Alert[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     const loadAlerts = async () => {
@@ -29,6 +31,10 @@ export default function Reports() {
     }
   }
 
+  const handleViewDetail = (id: number) => {
+    router.push(`/alerts/${id}`)
+  }
+
   const columns: ReportsTableProps['columns'] = [
     { header: 'Name', value: 'name' },
     { header: 'Age', value: 'age' },
@@ -39,10 +45,17 @@ export default function Reports() {
       value: '',
       renderAction: (item: Alert) => (
         <div className='flex justify-between'>
-          <Button variant='outline' size='icon'>
+          <Button
+            variant='outline'
+            size='icon'
+            onClick={() => handleViewDetail(item.id)}
+          >
             <Eye />
           </Button>
-          <Button className='bg-blue-200 text-slate-800' size='icon'>
+          <Button
+            className='bg-blue-200 text-slate-800 hover:bg-blue-300'
+            size='icon'
+          >
             <Pen />
           </Button>
           <ConfirmationDialog
