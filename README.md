@@ -10,6 +10,7 @@ Tato dokumentace popisuje celkovou architekturu, funkčnost a implementaci aplik
 4. [Backend dokumentace](./backend_documentation.md)
 5. [Frontend dokumentace](./frontend_documentation.md)
 6. [Nedokončené a budoucí funkce](#nedokončené-a-budoucí-funkce)
+7. [Ukázka aplikace](#ukázka-aplikace)
 
 ## Architektura aplikace
 
@@ -63,3 +64,11 @@ Aplikace využívá moderní technologie pro zajištění vysoké spolehlivosti,
 - **Podpora více jazyků**: Přidání podpory pro více jazyků, aby aplikace mohla být používána v různých zemích a pro různé jazykové skupiny.
 
 - **Automatizované reporty**: Generování automatizovaných reportů, které budou zasílány na e-mail administrátorům, aby měli přehled o aktivitě v systému.
+
+## Ukázka aplikace
+
+![Úvodní stránka](homepage.png)
+![Vytvoření upozornění](create_alert.png)
+![Detail upozornění](alert_detail.png)
+![Smazat upozornění](delete_alert.png)
+![Seznam upozornění](list_alerts.png)
