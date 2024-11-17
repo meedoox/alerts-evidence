@@ -185,7 +185,16 @@ export function AlertForm({
             </FormItem>
           )}
         />
-        <Button type='submit'>{isEditMode ? 'Update' : 'Create'}</Button>
+        <div className='flex justify-between'>
+          <Button
+            type='button'
+            variant='outline'
+            onClick={() => router.push(`/alerts/${alertId}`)}
+          >
+            Back to Alert
+          </Button>
+          <Button type='submit'>{isEditMode ? 'Update' : 'Create'}</Button>
+        </div>
       </form>
     </Form>
   )

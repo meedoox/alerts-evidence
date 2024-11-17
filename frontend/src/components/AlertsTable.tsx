@@ -9,7 +9,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { X, Check } from 'lucide-react'
-import { useEffect } from 'react'
 
 export interface ReportsTableProps {
   data: any[]

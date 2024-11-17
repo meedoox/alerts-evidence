@@ -26,7 +26,7 @@ export class AlertController {
       ...body,
       age: parseInt(body.age, 10),
       userId: parseInt(body.userId, 10),
-      filePath: file ? file.path : undefined,
+      file: file ? file.path : undefined,
     };
 
     return await this.alertService.createAlert(data);
@@ -49,10 +49,21 @@ export class AlertController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('file'))
   async updateAlert(
     @Param('id') id: string,
-    @Body() data: Partial<CreateAlertDto>,
+    @UploadedFile() file: Multer.File,
+    @Body() body: any,
   ) {
+    console.log(file);
+    const data: CreateAlertDto = {
+      ...body,
+      age: parseInt(body.age, 10),
+      userId: parseInt(body.userId, 10),
+      file: file ? file.originalname : undefined,
+    };
+
+    console.log(data);
     return await this.alertService.updateAlert(Number(id), data);
   }
 

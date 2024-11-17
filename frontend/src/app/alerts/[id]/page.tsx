@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { getAlertById } from '@/services/alerts'
+import { deleteAlert, getAlertById } from '@/services/alerts'
 import { Alert } from '@/types/alert'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -15,6 +15,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { format } from 'date-fns'
+import { ConfirmationDialog } from '@/components/ConfirmDialog'
+import { Trash2 } from 'lucide-react'
 
 export default function AlertDetailPage() {
   const { id } = useParams()
@@ -36,6 +38,16 @@ export default function AlertDetailPage() {
 
   if (!alert) {
     return <div>Loading...</div>
+  }
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteAlert(id)
+      setAlert(null)
+      router.push('/alerts')
+    } catch (error) {
+      console.error('Failed to delete alert:', error)
+    }
   }
 
   return (
@@ -87,9 +99,22 @@ export default function AlertDetailPage() {
             <Button variant='outline' onClick={() => router.push('/alerts')}>
               Back to Alerts
             </Button>
-            <Button onClick={() => router.push(`/alerts/edit/${alert.id}`)}>
-              Edit Alert
-            </Button>
+            <div className='space-x-4 flex'>
+              <ConfirmationDialog
+                trigger={
+                  <Button variant='destructive' size='icon'>
+                    <Trash2 />
+                  </Button>
+                }
+                title='Are you absolutely sure?'
+                description='This action cannot be undone. This will permanently delete this alert.'
+                confirmText='Delete'
+                onConfirm={() => handleDelete(alert.id)}
+              />
+              <Button onClick={() => router.push(`/alerts/edit/${alert.id}`)}>
+                Edit Alert
+              </Button>
+            </div>
           </CardFooter>
         </Card>
       </div>
