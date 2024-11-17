@@ -55,18 +55,15 @@ export function AlertForm({
 
   useEffect(() => {
     if (isEditMode && alertId) {
-      console.log('in')
       const loadAlert = async () => {
         try {
           const data = await getAlertById(alertId)
-          console.log(data)
           setDefaultValues({
             name: data.name,
             age: data.age.toString(),
             note: data.note || '',
             file: null,
           })
-          console.log(defaultValues)
         } catch (error) {
           console.error('Failed to load alert:', error)
         }
@@ -82,7 +79,6 @@ export function AlertForm({
 
   useEffect(() => {
     if (defaultValues) {
-      console.log('defaultValues changed:', defaultValues)
       form.reset(defaultValues)
     }
   }, [defaultValues])
@@ -154,11 +150,7 @@ export function AlertForm({
             <FormItem>
               <FormLabel>Note</FormLabel>
               <FormControl>
-                <Input
-                  placeholder='Additional note (optional)'
-                  {...field}
-                  defaultValue={defaultValues.note}
-                />
+                <Input placeholder='Additional note (optional)' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
