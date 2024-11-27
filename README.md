@@ -2,6 +2,8 @@
 
 Tato dokumentace popisuje celkovou architekturu, funkčnost a implementaci aplikace. Aplikace se skládá z backendové a frontendové části, přičemž každá z těchto částí má specifické funkce a technologie. Tato souhrnná dokumentace poskytuje přehled a zároveň odkazuje na podrobnější dokumentaci jednotlivých částí backendu a frontendu.
 
+[Zadání](./Assignment.md)
+
 ## Obsah
 
 1. [Architektura aplikace](#architektura-aplikace)
